@@ -14,8 +14,8 @@ test('App should render', () => {
 });
 
 test('Button should render', () => {
-  // TODO: change the expect to actually test something 😉
-  expect('no test written').toBe('tested');
+  render(<App />);
+  expect(screen.getByText(/Current theme:/)).toBeInTheDocument();
 });
 
 /**
@@ -23,16 +23,29 @@ test('Button should render', () => {
  * hint: use fireEvent.click(element) to trigger a click event on an element
  */
 test('theme button should update button text', () => {
-  // TODO: change the expect to actually test something 😉
-  expect('no test written').toBe('tested');
+  render(<App />);
+  const themeButton = screen.getByText(/Current theme:/);
+  
+  fireEvent.click(themeButton);
+  expect(themeButton).toHaveTextContent('Current theme: dark');
+
+  fireEvent.click(themeButton);
+  expect(themeButton).toHaveTextContent('Current theme: light');
 });
 
 // BONUS
 // hint: there is a `.toHaveStyle` method.
 // e.g.: expect(element).toHaveStyle('color: #FFF');
+
 test('theme button should toggle styles', () => {
-  // TODO: change the expect to actually test something 😉
-  expect('no test written').toBe('tested');
+  render(<App />);
+  const themeButton = screen.getByText(/Current theme:/);
+  
+  fireEvent.click(themeButton);
+  expect(document.body).toHaveStyle('background-color: #333');
+
+  fireEvent.click(themeButton);
+  expect(document.body).toHaveStyle('background-color: #FFF');
 });
 
 /**
@@ -45,8 +58,19 @@ test('theme button should toggle styles', () => {
  * (getByText will throw an error if it is not rendered)
  */
 test('hidden button should toggle hidden content', () => {
-  // TODO: change the expect to actually test something 😉
-  expect('no test written').toBe('tested');
+  render(<App />);
+  const toggleButton = screen.getByText(/Show hidden content/);
+  
+  // Before clicking, content should not be in the document
+  expect(screen.queryByText(/this content is hidden by default/)).not.toBeInTheDocument();
+  
+  // Click the button to show hidden content
+  fireEvent.click(toggleButton);
+  expect(screen.getByText(/this content is hidden by default/)).toBeInTheDocument();
+  
+  // Click again to hide content
+  fireEvent.click(toggleButton);
+  expect(screen.queryByText(/this content is hidden by default/)).not.toBeInTheDocument();
 });
 
 
